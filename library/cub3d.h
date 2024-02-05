@@ -15,6 +15,9 @@
 # define CHAR_EAST 'E'
 # define CHAR_WEST 'W'
 
+# define TEX_H 64
+# define TEX_W 64
+
 #include <stdlib.h>
 
 typedef struct s_color
@@ -46,6 +49,13 @@ typedef struct s_mlx
 {
     void *init;
     void *window;
+    void *img;
+
+    char *addr;
+    int bpp; // bit_per_pixels
+    int line_length;
+    int endian;
+
 } t_mlx;
 
 typedef struct s_data
@@ -78,7 +88,8 @@ void    start_mlx(t_data *data);
 int     event_key(int key_code, t_data *data);
 int     close_prog(t_data *data);
 
-
 void    data_free(t_data *data);
+
+void	load_texture(t_data *data);
 
 #endif

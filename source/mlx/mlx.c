@@ -27,4 +27,7 @@ void start_mlx(t_data *data)
 {
     data->mlx.init = mlx_init();
     data->mlx.window = mlx_new_window(data->mlx.init, 1920, 1080, "test");
+    data->mlx.img = mlx_new_image(data->mlx.init,1920,1080);
+    data->mlx.addr = mlx_get_data_addr(data->mlx.img, &data->mlx.bpp, &data->mlx.line_length, &data->mlx.endian);
+    
 }

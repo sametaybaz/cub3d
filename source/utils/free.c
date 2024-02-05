@@ -34,5 +34,5 @@ void data_free(t_data *data)
     free(data->map.roads);
 
     mlx_destroy_window(data->mlx.init,data->mlx.window);
-
+    mlx_destroy_image(data->mlx.init, data->mlx.img);
 }
