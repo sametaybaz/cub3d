@@ -21,7 +21,7 @@ SRC		:= source/main.c \
 			source/checker/directions.c \
 			source/checker/floor_ceiling.c \
 			source/mlx/mlx.c \
-			soruce/utils/free.c
+			source/utils/free.c
 
 OBJDIR	:= ./library/objects
 OBJ		:= $(SRC:%.c=$(OBJDIR)/%.o)

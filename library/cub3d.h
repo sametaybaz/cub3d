@@ -44,8 +44,8 @@ typedef	struct s_map
 
 typedef struct s_mlx 
 {
-    void *mlx_init;
-    void *mlx_new_window;
+    void *init;
+    void *window;
 } t_mlx;
 
 typedef struct s_data

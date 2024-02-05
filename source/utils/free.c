@@ -33,6 +33,6 @@ void data_free(t_data *data)
     free(data->map.spaces);
     free(data->map.roads);
 
-    mlx_destroy_window(data->mlx.mlx_init,data->mlx.mlx_new_window);
+    mlx_destroy_window(data->mlx.init,data->mlx.window);
 
 }
