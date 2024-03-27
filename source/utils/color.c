@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix.c                                           :+:      :+:    :+:   */
+/*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 17:18:46 by akaniber          #+#    #+#             */
-/*   Updated: 2024/03/10 17:42:06 by akaniber         ###   ########.fr       */
+/*   Created: 2024/03/01 13:18:33 by akaniber          #+#    #+#             */
+/*   Updated: 2024/03/09 19:05:51 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../library/libft/libft.h"
+#include "../library/cub3d.h"
 
-int	get_longer_line_length(char **map)
+int	rgb_to_hex(t_color color)
 {
-	int	i;
-	int	max;
-	int	len;
-
-	i = 0;
-	max = 0;
-	while (map[i])
-	{
-		len = ft_strlen(map[i]);
-		if (len > max)
-			max = len;
-		i++;
-	}
-	return (max);
+	return ((color.r << 16) | (color.g << 8) | color.b);
 }

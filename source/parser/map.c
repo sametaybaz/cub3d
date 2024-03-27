@@ -6,13 +6,20 @@
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:42:27 by akaniber          #+#    #+#             */
-/*   Updated: 2024/02/03 13:53:26 by akaniber         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:46:54 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../library/cub3d.h"
 #include "../library/libft/libft.h"
 #include <stdlib.h>
+
+static t_point	pass_space(t_data data, t_point point)
+{
+	while (data.value[point.y][point.x] == SPACE)
+		point.x++;
+	return (point);
+}
 
 static t_point	get_map_start_point(t_data data)
 {
@@ -26,16 +33,14 @@ static t_point	get_map_start_point(t_data data)
 	{
 		start.y = point.y;
 		start.x = point.x;
-		while (data.value[point.y][point.x] == SPACE)
-			point.x++;
+		point = pass_space(data, point);
 		while (data.value[point.y][point.x] == WALL
 				|| data.value[point.y][point.x] == ROAD)
-			{
-				point.x++;
-				control = 1;
-			}
-		while (data.value[point.y][point.x] == SPACE)
+		{
 			point.x++;
+			control = 1;
+		}
+		point = pass_space(data, point);
 		if (data.value[point.y][point.x] == '\0' && control)
 			return (start);
 		point.y++;
@@ -45,74 +50,67 @@ static t_point	get_map_start_point(t_data data)
 	return (start);
 }
 
-static	t_data	set_map_points(t_data data)
+static	t_data	set_player_point(t_data data)
 {
-	int		wall;
-	int		road;
-	int		space;
 	t_point	point;
 
-	wall = 0;
-	road = 0;
-	space = 0;
 	ft_memset(&point, 0, sizeof(point));
-	while (data.map.value[point.y])
+	while (data.map[point.x])
 	{
-		point.x = 0;
-		while (data.map.value[point.y][point.x])
+		point.y = 0;
+		while (data.map[point.x][point.y])
 		{
-			if (data.map.value[point.y][point.x] == WALL)
-				data.map.walls[wall++] = point;
-			if (data.map.value[point.y][point.x] == ROAD)
-				data.map.roads[road++] = point;
-			if (data.map.value[point.y][point.x] == SPACE)
-				data.map.spaces[space++] = point;
-			if (data.map.value[point.y][point.x] == CHAR_NORTH
-			|| data.map.value[point.y][point.x] == CHAR_SOUTH
-			|| data.map.value[point.y][point.x] == CHAR_EAST
-			|| data.map.value[point.y][point.x] == CHAR_WEST)
-				data.map.start = point;
-			point.x++;
+			if (data.map[point.x][point.y] == CHAR_NORTH
+			|| data.map[point.x][point.y] == CHAR_SOUTH
+			|| data.map[point.x][point.y] == CHAR_EAST
+			|| data.map[point.x][point.y] == CHAR_WEST)
+				data.player = point;
+			point.y++;
 		}
-		point.y++;
+		point.x++;
 	}
+	data.map_height = point.x;
 	return (data);
 }
 
-static	t_data	set_map_value(t_data data)
+static	t_data	set_map_value(t_point start, t_data data)
 {
-	t_point	start;
 	int		map_size;
 	int		i;
 
 	i = 0;
 	map_size = 0;
-	start = get_map_start_point(data);
 	while (data.value[start.y + map_size])
 		map_size++;
-	if (start.x > -1 && start.y > -1)
+	data.map = (char **)malloc(sizeof(char *) * (map_size + 3));
+	if (!data.map)
+		return (data.map = NULL, data);
+	data.map[i] = create_map_line(data, "");
+	if (!data.map[i++])
+		return (data.map = NULL, data);
+	while (data.value[start.y])
 	{
-		data.map.value = (char **)malloc(sizeof(char *) * (map_size + 1));
-		while (data.value[start.y])
-		{
-			data.map.value[i] = ft_strdup(data.value[start.y]);
-			start.y++;
-			i++;
-		}
-		data.map.value[i] = NULL;
+		data.map[i] = create_map_line(data, data.value[start.y++]);
+		if (!data.map[i++])
+			return (data.map = NULL, data);
 	}
+	data.map[i] = create_map_line(data, "");
+	if (!data.map[i])
+		return (data.map = NULL, data);
+	data.map[i + 1] = NULL;
 	return (data);
 }
 
 t_data	parse_map(t_data data)
 {
-	data = set_map_value(data);
-	data.map.wall_count = count_char_in_matrix(data.map.value, WALL);
-	data.map.road_count = count_char_in_matrix(data.map.value, ROAD);
-	data.map.space_count = count_char_in_matrix(data.map.value, SPACE);
-	data.map.walls = (t_point *)malloc(sizeof(t_point) * data.map.wall_count);
-	data.map.roads = (t_point *)malloc(sizeof(t_point) * data.map.road_count);
-	data.map.spaces = (t_point *)malloc(sizeof(t_point) * data.map.space_count);
-	data = set_map_points(data);
+	t_point	start;
+
+	start = get_map_start_point(data);
+	if (start.x == -1 && start.y == -1)
+		return (data.map = NULL, data);
+	data = set_map_value(start, data);
+	if (!data.map)
+		return (data);
+	data = set_player_point(data);
 	return (data);
 }

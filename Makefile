@@ -1,11 +1,11 @@
 NAME	:= cub3d
 CC		:= gcc 
 INCLUDE	:= ./library
-CFLAGS	:= -ggdb -I $(INCLUDE) -I ./library/libft -I ./library/minilibx
+CFLAGS	:= -ggdb -I $(INCLUDE) -I ./library/libft
 LIBFT	= library/libft
-MLX		= library/minilibx
+MINILIBX = library/minilibx
 FLAGS	= -Wall -Wextra -Werror
-LFLAGS	= -framework OpenGL -framework AppKit
+LIBS	= -L$(LIBFT) -lft -L$(MINILIBX) -lmlx -framework OpenGL -framework AppKit
 
 SRCDIR	:= source
 SRC		:= source/main.c \
@@ -15,13 +15,28 @@ SRC		:= source/main.c \
 			source/parser/parser.c \
 			source/parser/floor_ceiling.c \
 			source/parser/map.c \
-			source/utils/matrix.c \
 			source/utils/file_exits.c \
 			source/checker/checker.c \
 			source/checker/directions.c \
 			source/checker/floor_ceiling.c \
-			source/mlx/mlx.c \
-			source/utils/free.c
+			source/minilibx/create.c \
+			source/minilibx/events.c \
+			source/minilibx/image.c \
+			source/minilibx/minilibx.c \
+			source/minilibx/move_rotate.c \
+			source/minilibx/ray_casting.c \
+			source/minilibx/ray_utils.c \
+			source/minilibx/ray_utils2.c \
+			source/minilibx/fov.c \
+			source/checker/first_checker.c \
+			source/utils/string.c \
+			source/checker/wall.c \
+			source/utils/color.c \
+			source/checker/file.c \
+			source/utils/free.c \
+			source/parser/data.c \
+			source/utils/matrix.c \
+			source/parser/create.c
 
 OBJDIR	:= ./library/objects
 OBJ		:= $(SRC:%.c=$(OBJDIR)/%.o)
@@ -30,10 +45,10 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	make -C $(LIBFT)
+	make -C $(MINILIBX)
 	cp $(LIBFT)/libft.a library/.
-	make -C $(MLX)
-	cp $(MLX)/libmlx.a library/.
-	@$(CC) $(FLAGS) $(CFLAGS) $(LFLAGS) $(OBJ) library/libft.a library/libmlx.a -o $@
+	cp $(MINILIBX)/libmlx.a library/.
+	@$(CC) $(FLAGS) $(CFLAGS) $(OBJ) $(LIBS) -o $@
 
 $(OBJDIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -41,15 +56,15 @@ $(OBJDIR)/%.o: %.c
 
 clean:
 	make clean -C $(LIBFT)
+	make clean -C $(MINILIBX)
 	rm -rf library/libft.a
-	make clean -C $(MLX)
 	rm -rf library/libmlx.a
 	@rm -rf $(OBJDIR)
 
 fclean:
 	make fclean -C $(LIBFT)
+	make clean -C $(MINILIBX)
 	rm -rf library/libft.a
-	make fclean -C $(MLX)
 	rm -rf library/libmlx.a
 	@rm -rf $(OBJDIR)
 	@rm -f $(NAME)

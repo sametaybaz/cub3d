@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matrix.c                                           :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 17:18:46 by akaniber          #+#    #+#             */
-/*   Updated: 2024/03/10 17:42:06 by akaniber         ###   ########.fr       */
+/*   Created: 2024/03/10 12:30:46 by akaniber          #+#    #+#             */
+/*   Updated: 2024/03/10 12:32:52 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../library/cub3d.h"
 #include "../library/libft/libft.h"
 
-int	get_longer_line_length(char **map)
+char	*get_data_value(t_data data, char *field)
 {
 	int	i;
-	int	max;
-	int	len;
 
 	i = 0;
-	max = 0;
-	while (map[i])
+	while (data.value[i][0])
 	{
-		len = ft_strlen(map[i]);
-		if (len > max)
-			max = len;
+		if (!ft_strncmp(data.value[i], field, ft_strlen(field)))
+			return (ft_strdup(&data.value[i][ft_strlen(field) + 1]));
 		i++;
 	}
-	return (max);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 17:37:05 by akaniber          #+#    #+#             */
-/*   Updated: 2024/01/29 12:18:39 by akaniber         ###   ########.fr       */
+/*   Updated: 2024/03/09 17:50:22 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strjoin(char *left_str, char *buff)
 		return (NULL);
 	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
 	if (str == NULL)
-		return (NULL);
+		return (free(left_str), NULL);
 	i = -1;
 	j = 0;
 	if (left_str)

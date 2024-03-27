@@ -6,53 +6,38 @@
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 13:14:13 by akaniber          #+#    #+#             */
-/*   Updated: 2024/02/03 14:16:14 by akaniber         ###   ########.fr       */
+/*   Updated: 2024/03/10 19:26:58 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../library/cub3d.h"
 #include "../library/libft/libft.h"
-#include "../library/minilibx/mlx.h"
-
-#include <stdio.h>
 #include <stdlib.h>
 
-void mlx_funcs(t_data *data)
+int	main(int argc, char **argv)
 {
-    mlx_hook(data->mlx.window, 2, 1L, event_key, data);
-    mlx_hook(data->mlx.window, 17, 0, close_prog, data);
-    mlx_do_sync(data->mlx.init);
-    mlx_loop(data->mlx.init);
-}
+	char	*file;
+	t_game	game;
 
-int main()
-{
-    char *file;
-    t_data data;
-    char *map;
-
-    map = "assets/maps/map1.cub";
-    if (!ft_strcmp(&map[ft_strlen(map) - 4], ".cub"))
-    {
-        file = reader(map);
-        data = parser(file);
-        if (checker(data))
-        {   
-            start_mlx(&data);
-            mlx_funcs(&data);
-            // init_texture(&data);  // HALLEDİLECEK 
-            /* 
-            start_mlx(&data);
-            mlx_hook(data.mlx.window, 2, 1L, event_key, &data);
-            mlx_hook(data.mlx.window, 17, 0, close_prog, &data);
-            mlx_do_sync(data.mlx.init);
-            mlx_loop(data.mlx.init);
-            */
-        }
-        else
-            printf("hata");
-        free(file);
-        data_free(&data);
-    }
-    return (0);
+	if (argc == 2)
+	{
+		ft_memset(&game, 0, sizeof(game));
+		if (check_file_name(argv[1]))
+		{
+			file = reader(argv[1]);
+			if (first_checker(file))
+			{
+				game.data = parser(file);
+				if (checker(game.data))
+					minilibx(&game);
+				free_data(game.data);
+				free_game(&game);
+			}
+			free(file);
+		}
+	}
+	else
+		error(40, "main.c", \
+		"You have to give correct two arguments on terminal", NULL);
+	return (0);
 }

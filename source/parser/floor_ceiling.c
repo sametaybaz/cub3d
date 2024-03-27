@@ -6,7 +6,7 @@
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 16:12:15 by akaniber          #+#    #+#             */
-/*   Updated: 2024/01/29 16:42:10 by akaniber         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:41:30 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,67 @@
 #include "../library/cub3d.h"
 #include <stdlib.h>
 
-t_data	parse_floor_and_ceilling(t_data data)
+static t_data	parse_floor(t_data data)
 {
-	char	*rgb_text;
-	char	**rgb_array;
+	char	*text;
+	char	**array;
+	int		i;
+	int		length;
 
-	rgb_text = get_data_value(data, FLOOR);
-	rgb_array = ft_split(rgb_text, ',');
-	data.floor.r = ft_atoi(rgb_array[0]);
-	data.floor.g = ft_atoi(rgb_array[1]);
-	data.floor.b = ft_atoi(rgb_array[2]);
-	free(rgb_text);
-	free(rgb_array[0]);
-	free(rgb_array[1]);
-	free(rgb_array[2]);
-	free(rgb_array);
-	rgb_text = get_data_value(data, CEILING);
-	rgb_array = ft_split(rgb_text, ',');
-	data.ceiling.r = ft_atoi(rgb_array[0]);
-	data.ceiling.g = ft_atoi(rgb_array[1]);
-	data.ceiling.b = ft_atoi(rgb_array[2]);
-	free(rgb_text);
-	free(rgb_array[0]);
-	free(rgb_array[1]);
-	free(rgb_array[2]);
-	free(rgb_array);
+	i = 0;
+	text = get_data_value(data, FLOOR);
+	data.floor.r = -1;
+	if (count_char_in_string(text, ',') == 2)
+	{
+		array = ft_split(text, ',');
+		if (!array)
+			return (data);
+		length = ft_strlen_2d(array);
+		if (length == 3)
+		{
+			data.floor.r = ft_atoi(array[0]);
+			data.floor.g = ft_atoi(array[1]);
+			data.floor.b = ft_atoi(array[2]);
+		}
+		while (length > i)
+			free(array[i++]);
+		free(array);
+	}
+	return (free(text), data);
+}
+
+static t_data	parse_ceiling(t_data data)
+{
+	char	*text;
+	char	**array;
+	int		i;
+	int		length;
+
+	i = 0;
+	text = get_data_value(data, CEILING);
+	data.ceiling.r = -1;
+	if (count_char_in_string(text, ',') == 2)
+	{
+		array = ft_split(text, ',');
+		if (!array)
+			return (data);
+		length = ft_strlen_2d(array);
+		if (length == 3)
+		{
+			data.ceiling.r = ft_atoi(array[0]);
+			data.ceiling.g = ft_atoi(array[1]);
+			data.ceiling.b = ft_atoi(array[2]);
+		}
+		while (length > i)
+			free(array[i++]);
+		free(array);
+	}
+	return (free(text), data);
+}
+
+t_data	parse_floor_and_ceiling(t_data data)
+{
+	data = parse_floor(data);
+	data = parse_ceiling(data);
 	return (data);
 }

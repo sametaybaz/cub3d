@@ -6,7 +6,7 @@
 /*   By: akaniber <akaniber@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 15:45:35 by akaniber          #+#    #+#             */
-/*   Updated: 2024/02/03 10:37:23 by akaniber         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:13:22 by akaniber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ char	*ft_strtrim(char *s1, char *s2)
 		start++;
 	}
 	str[i] = '\0';
-	free(s1);
-	return (str);
+	return (free(s1), str);
 }
